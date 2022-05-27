@@ -130,8 +130,21 @@ Vagrant.configure("2") do |config|
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/etc/apt/keyrings/docker.gpg] https://download.docker.com/linux/debian ${DEB_RELEASE} stable" | tee /etc/apt/sources.list.d/docker.list > /dev/nul
     apt-get update
     apt-get install -y docker-ce docker-ce-cli containerd.io docker-compose-plugin
+    # Install dependencies for rootless docker
+    apt-get install -y uidmap fuse-overlayfs
+    # Disable system-wide docker daemon
+    systemctl disable --now docker.service docker.socket
+    systemctl stop docker.service docker.socket
+    # Install rootless docker as user
+    su vagrant -c '/usr/bin/dockerd-rootless-setuptool.sh install'
+    # Set rootless docker to be used by default
+    su vagrant -c 'echo "export DOCKER_HOST=unix:///run/user/1000/docker.sock" >> ~/.zshrc'
+    su vagrant -c 'systemctl --user enable docker'
+    su vagrant -c 'systemctl --user start docker'
+    loginctl enable-linger vagrant
+    su vagrant -c 'echo "docker context use rootless" >> ~/.zshrc'
     # Test installation
-    docker run --rm hello-world
+    su vagrant -c 'source ~/.zshrc && docker run --rm hello-world'
 
     # Require password to use sudo. Note: this needs to come at the end of provisioning since vagrant relies on sudo for commands.
     sed -i 's/NOPASSWD/PASSWD/' /etc/sudoers.d/vagrant
