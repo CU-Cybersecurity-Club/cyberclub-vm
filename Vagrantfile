@@ -10,9 +10,21 @@ Vagrant.configure("2") do |config|
   # For a complete reference, please see the online documentation at
   # https://docs.vagrantup.com.
 
+  is_arm = begin
+    # If vagrant is being run using rosetta (internally named oahd) which seamlessly runs some x64 executables on m1 macs, then we know we're on an arm platform
+    (RUBY_PLATFORM.include? 'arm') || (`pgrep oahd` != "")
+  rescue Errno::environment
+    # Couldn't find pgrep executable, assume it's not arm
+    false
+  end
+
   # Every Vagrant development environment requires a box. You can search for
   # boxes at https://vagrantcloud.com/search.
-  config.vm.box = "kalilinux/rolling"
+  if is_arm
+    config.vm.box = "klinvill/kali_arm"
+  else
+    config.vm.box = "kalilinux/rolling"
+  end
 
   # Disable automatic box update checking. If you disable this, then
   # boxes will only be checked for updates when the user runs
