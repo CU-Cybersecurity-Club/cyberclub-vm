@@ -130,9 +130,11 @@ Vagrant.configure("2") do |config|
     echo "vagrant:${PASSWORD}" | chpasswd
     unset PASSWORD
 
+    # debconf is set with a non-existent drive for grub. When grub needs to be upgraded, this causes the script to hang. We instead try to pre-empt that by setting debconf to answer with the appropriate device here.
+    echo "set grub-pc/install_devices /dev/sda" | sudo debconf-communicate
     # Good practice to patch when you can
     apt-get update
-    apt-get -y upgrade
+    DEBIAN_FRONTEND=noninteractive apt-get -y -o Dpkg::Options::="--force-confdef" -o Dpkg::Options::="--force-confold" upgrade
 
     # Install docker
     mkdir -p /etc/apt/keyrings
