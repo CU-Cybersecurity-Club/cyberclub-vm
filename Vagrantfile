@@ -152,7 +152,6 @@ Vagrant.configure("2") do |config|
     # Install rootless docker as user
     su vagrant -c '/usr/bin/dockerd-rootless-setuptool.sh install'
     # Set rootless docker to be used by default
-    su vagrant -c 'echo "export DOCKER_HOST=unix:///run/user/1000/docker.sock" >> ~/.zshrc'
     su vagrant -c 'systemctl --user enable docker'
     su vagrant -c 'systemctl --user start docker'
     loginctl enable-linger vagrant
