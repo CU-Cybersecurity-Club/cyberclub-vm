@@ -24,8 +24,6 @@ Vagrant.configure("2") do |config|
     config.vm.box = "klinvill/kali_arm"
   else
     config.vm.box = "kalilinux/rolling"
-    # There's an error in v2022.3.1 and v2022.3.2 that prevents these boxes from working normally. Avoid those boxes until the issue can be fixed.
-    config.vm.box_version = "< 2022.3.0"
   end
 
   # Disable automatic box update checking. If you disable this, then
