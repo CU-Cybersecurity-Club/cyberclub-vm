@@ -13,7 +13,7 @@ Vagrant.configure("2") do |config|
   is_arm = begin
     # If vagrant is being run using rosetta (internally named oahd) which seamlessly runs some x64 executables on m1 macs, then we know we're on an arm platform
     (RUBY_PLATFORM.include? 'arm') || (`pgrep oahd` != "")
-  rescue Errno::environment
+  rescue
     # Couldn't find pgrep executable, assume it's not arm
     false
   end
