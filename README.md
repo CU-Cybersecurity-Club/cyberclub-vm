@@ -11,6 +11,9 @@ This repo contains the Vagrantfile needed to build the cybersecurity club VM. Th
 ## Running labs
 Labs are currently located at https://github.com/klinvill/cyberclub-labs. You can clone the labs from there and run them following the instructions in each lab.
 
+## Note on Windows platforms
+Running `vagrant up` (or other commands that trigger the provisioning script) crashes if run in a non-Windows shell (e.g. git bash). Please make sure you run the command in a Windows shell like PowerShell or Cmd.
+
 ## Note on ARM platforms (e.g. M1 Macs)
 We have attempted to provide out-of-the-box support for M1 macs by pointing to an ARM Kali box if the machine is detected to have an ARM architecture or to be running Rosetta (translation for x64 executables). In this case, you will need to run the VM using the VMWare Fusion tech preview (one of the few hypervisors that currently runs on M1 Macs to our knowledge). The instructions at this gist (up through "Installing Vagrant VMWare provider"): https://gist.github.com/sbailliez/f22db6434ac84eccb6d3c8833c85ad92 worked on 6/8/2022. The latest link to the ARM tech preview as of 8/18/2022 is https://customerconnect.vmware.com/downloads/get-download?downloadGroup=FUS-PUBTP-22H2. You may have to google around to find the latest tech preview (or hopefully simply find that arm support has been added to the main VMWare Fusion product).
 
